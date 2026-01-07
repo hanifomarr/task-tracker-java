@@ -1,11 +1,10 @@
 package com.hanifomarr.tasks.controllers;
 
 import com.hanifomarr.tasks.domain.dto.TaskListDto;
+import com.hanifomarr.tasks.domain.entities.TaskList;
 import com.hanifomarr.tasks.mappers.TaskListMapper;
 import com.hanifomarr.tasks.services.TaskListService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,6 +23,13 @@ public class TaskListController {
     @GetMapping
     public List<TaskListDto> listTaskLists() {
         return taskListService.listTaskLists().stream().map(taskListMapper::toDto).toList();
+    }
+
+    @PostMapping
+    public TaskListDto createTaskList(@RequestBody TaskListDto taskListDto) {
+
+        TaskList createdTaskList = taskListService.createTaskLists(taskListMapper.fromDto(taskListDto));
+        return taskListMapper.toDto(createdTaskList);
     }
 
 }

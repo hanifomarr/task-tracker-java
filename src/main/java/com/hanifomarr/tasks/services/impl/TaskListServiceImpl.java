@@ -4,6 +4,7 @@ import com.hanifomarr.tasks.domain.entities.TaskList;
 import com.hanifomarr.tasks.repositories.TaskListRepository;
 import com.hanifomarr.tasks.services.TaskListService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -52,6 +53,7 @@ public class TaskListServiceImpl implements TaskListService {
         return taskListRepository.findById(id);
     }
 
+    @Transactional
     @Override
     public TaskList updateTaskList(UUID taskListId, TaskList taskList) {
         TaskList existingTaskList = taskListRepository.findById(taskListId).orElseThrow(() -> new IllegalArgumentException("Task list not found"));

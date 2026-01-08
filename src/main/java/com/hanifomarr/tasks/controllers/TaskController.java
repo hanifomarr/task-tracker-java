@@ -4,6 +4,7 @@ import com.hanifomarr.tasks.domain.dto.TaskDto;
 import com.hanifomarr.tasks.domain.entities.Task;
 import com.hanifomarr.tasks.mappers.TaskMapper;
 import com.hanifomarr.tasks.services.TaskService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,5 +33,16 @@ public class TaskController {
 
         Task createdTask = taskService.createTask(taskListId, taskMapper.fromDto(taskDto));
         return taskMapper.toDto(createdTask);
+    }
+
+    @GetMapping(path = "/{task_id}")
+    public ResponseEntity<TaskDto> getTask(
+            @PathVariable("task_list_id") UUID taskListId,
+            @PathVariable("task_id") UUID taskId) {
+        return taskService
+                .getTask(taskListId, taskId)
+                .map(taskMapper::toDto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }

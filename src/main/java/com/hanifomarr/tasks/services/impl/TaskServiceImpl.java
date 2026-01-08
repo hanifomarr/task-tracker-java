@@ -63,5 +63,26 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.findByTaskListIdAndId(taskListId, taskId);
     }
 
+    @Override
+    public Task updateTask(UUID taskListId, UUID taskId, Task task) {
+
+        if (task.getId() != null && !taskId.equals(task.getId())) {
+            throw new IllegalArgumentException("Task ID mismatch");
+        }
+
+        Task existingTask = taskRepository
+                .findByTaskListIdAndId(taskListId, taskId)
+                .orElseThrow(() -> new IllegalArgumentException("Cannot find task"));
+
+        existingTask.setTitle(task.getTitle());
+        existingTask.setDescription(task.getDescription());
+        existingTask.setDueDate(task.getDueDate());
+        existingTask.setStatus(task.getStatus());
+        existingTask.setPriority(task.getPriority());
+        existingTask.setUpdated(LocalDateTime.now());
+
+        return taskRepository.save(existingTask);
+    }
+
 
 }
